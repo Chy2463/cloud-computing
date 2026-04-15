@@ -1,0 +1,31 @@
+services:
+  presentation-service:
+    build:
+      context: ./presentation-service
+    ports:
+      - "${PRESENTATION_PORT:-8080}:8080"
+    environment:
+      - WORKFLOW_BASE_URL=${WORKFLOW_BASE_URL:-http://workflow-service:8081}
+    depends_on:
+      - workflow-service
+
+  workflow-service:
+    build:
+      context: ./workflow-service
+    ports:
+      - "${WORKFLOW_PORT:-8081}:8081"
+    environment:
+      - DATA_BASE_URL=${DATA_BASE_URL:-http://data-service:8082}
+    depends_on:
+      - data-service
+
+  data-service:
+    build:
+      context: ./data-service
+    ports:
+      - "${DATA_PORT:-8082}:8082"
+    environment:
+      - SQLITE_PATH=${SQLITE_PATH:-/data/campus_buzz.sqlite}
+    volumes:
+      - ./data-service/storage:/data
+
