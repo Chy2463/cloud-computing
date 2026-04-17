@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, redirect, url_for
 def create_app() -> Flask:
     app = Flask(__name__, template_folder="templates")
 
-    workflow_base_url = os.getenv("WORKFLOW_BASE_URL", "http://workflow-service:5001")
+    workflow_base_url = os.getenv("WORKFLOW_BASE_URL", "http://workflow-service:8081")
 
     @app.get("/")
     def index():
