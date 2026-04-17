@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Buzz Submission</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #eef4ff, #f9fbff);
+            color: #1f2937;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 760px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            color: #2563eb;
+        }
+
+        .header h2 {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-weight: normal;
+            color: #6b7280;
+        }
+
+        form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+            background: #f9fafb;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .submit-btn {
+            margin-top: 10px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .hint {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 24px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Campus Buzz</h1>
+            <h2>Submit a Campus Event</h2>
+        </div>
+
+        <form method="post" action="/submit">
+            <div class="form-group">
+                <label for="title">Event Title</label>
+                <input type="text" id="title" name="title" placeholder="Enter event title">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Write a clear event description..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" placeholder="Enter event location">
+            </div>
+
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="text" id="date" name="date" placeholder="YYYY-MM-DD">
+            </div>
+
+            <div class="form-group">
+                <label for="organiser">Organiser</label>
+                <input type="text" id="organiser" name="organiser" placeholder="Enter organiser name">
+            </div>
+
+            <button class="submit-btn" type="submit">Submit Event</button>
+        </form>
+
+        <div class="hint">Fill in all required event details before submission.</div>
+    </div>
+</body>
+</html>
