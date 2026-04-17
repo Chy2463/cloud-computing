@@ -224,6 +224,7 @@ After deployment:
 ## Validation and Test Cases
 
 See [docs/test-cases.md](file:///c:/Users/33607/Desktop/Miniproject/cloud-computing/docs/test-cases.md) for suggested cases.
+See [docs/simple-testing.md](file:///c:/Users/33607/Desktop/Miniproject/cloud-computing/docs/simple-testing.md) for quick, minimal test steps.
 
 Minimum acceptance checks:
 - Missing required fields → `INCOMPLETE`
