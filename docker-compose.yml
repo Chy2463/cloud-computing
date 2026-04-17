@@ -16,6 +16,8 @@ services:
       - "${WORKFLOW_PORT:-8081}:8081"
     environment:
       - DATA_BASE_URL=${DATA_BASE_URL:-http://data-service:8082}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - SUBMISSION_EVENT_FUNCTION_NAME=${SUBMISSION_EVENT_FUNCTION_NAME:-}
     depends_on:
       - data-service
 
