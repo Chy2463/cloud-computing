@@ -1,10 +1,18 @@
 # End-to-End Evidence (Containers + Serverless)
 
-This document explains how the system evidence demonstrates the required hybrid-cloud workflow using:
+This document is the evidence pack for MiniProject 1. It proves the required hybrid-cloud workflow using:
 
-- EC2 + Docker Compose for the 3 container services
-- AWS Lambda for the 3 serverless functions
+- EC2 + Docker Compose for 3 container services
+- AWS Lambda for 3 serverless functions
 - CloudWatch Logs (Lambda) and container logs (EC2) as runtime proof
+
+## Evidence Metadata
+
+- Evidence date (UTC): `<YYYY-MM-DD>`
+- EC2 public IP / EIP: `<EC2_EIP>`
+- One traced submission_id: `<submission_id>`
+
+All screenshots and log snippets below must include the same `submission_id`.
 
 ## Required Workflow (What Must Be Proven)
 
@@ -30,7 +38,21 @@ The attached screenshots/logs provide:
   - Workflow service API calls (create, query, write-back)
   - Data service storage operations (create record, patch result)
 
-Each evidence item includes at least one `submission_id` that can be traced across components.
+Each evidence item below includes the same `submission_id` and can be traced across components.
+
+## Evidence 0 — UI Proof (Presentation Service on EC2)
+
+Attach:
+
+- Screenshot A: `http://<EC2_EIP>:8080/` (submission form)
+- Screenshot B: `http://<EC2_EIP>:8080/status/<submission_id>` showing initial `PENDING`
+- Screenshot C: same URL after refresh showing final `APPROVED | NEEDS_REVISION | INCOMPLETE`
+
+Notes:
+
+- The project expects the status to start as `PENDING` and update after a few seconds.
+
+## Evidence 1 — SubmissionEventFunction (CloudWatch Logs)
 
 ## Evidence 1 — SubmissionEventFunction (CloudWatch Logs)
 
@@ -130,6 +152,28 @@ To demonstrate end-to-end traceability:
    - `http://<EC2_EIP>:8080/status/<submission_id>`
 4. Confirm the displayed fields match the final stored result:
    - `status`, `category`, `priority`, `note`
+
+## Collection Commands (Copy/Paste)
+
+Run on EC2 (from repository root) to capture container logs:
+
+```bash
+docker compose ps
+docker compose logs --tail=200 presentation-service
+docker compose logs --tail=200 workflow-service
+docker compose logs --tail=200 data-service
+```
+
+Optional: verify the record state via Workflow API:
+
+```bash
+curl -s http://127.0.0.1:8081/api/submissions/<submission_id> | python3 -m json.tool
+```
+
+CloudWatch Logs:
+
+- Open each Lambda log group and search for the same `submission_id`.
+- Copy/paste the relevant START/END/REPORT lines and the JSON log lines (or attach screenshots).
 
 ## Conclusion
 

@@ -1,2 +1,18 @@
-{}
+{
+  "id": "TC7",
+  "name": "Social keywords -> SOCIAL + NORMAL",
+  "input": {
+    "title": "Club Meetup",
+    "description": "This is a valid description with more than forty characters.",
+    "location": "Campus",
+    "date": "2026-04-17",
+    "organiser": "Frank"
+  },
+  "expected": {
+    "status": "APPROVED",
+    "category": "SOCIAL",
+    "priority": "NORMAL",
+    "note": "Approved"
+  }
+}
 

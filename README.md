@@ -201,6 +201,34 @@ This is the recommended minimal setup for the course-style project:
 docker compose up --build -d
 ```
 
+EC2 command checklist (Ubuntu-style):
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl git
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo $VERSION_CODENAME) stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo usermod -aG docker $USER
+newgrp docker
+
+git clone <YOUR_REPO_URL>
+cd cloud-computing
+cp .env.example .env
+
+docker compose up --build -d
+docker compose ps
+```
+
 ### Lambda
 
 Create and configure:
@@ -223,8 +251,8 @@ After deployment:
 
 ## Validation and Test Cases
 
-See [docs/test-cases.md](file:///c:/Users/33607/Desktop/Miniproject/cloud-computing/docs/test-cases.md) for suggested cases.
-See [docs/simple-testing.md](file:///c:/Users/33607/Desktop/Miniproject/cloud-computing/docs/simple-testing.md) for quick, minimal test steps.
+See [docs/test-cases.md](docs/test-cases.md) for suggested cases.
+See [docs/simple-testing.md](docs/simple-testing.md) for quick, minimal test steps.
 
 Minimum acceptance checks:
 - Missing required fields → `INCOMPLETE`
@@ -243,4 +271,4 @@ Minimum acceptance checks:
 
 ## Evidence
 
-See [docs/e2e-evidence.md](file:///c:/Users/33607/Desktop/Miniproject/cloud-computing/docs/e2e-evidence.md) for an end-to-end evidence narrative (CloudWatch + EC2 container logs).
+See [docs/e2e-evidence.md](docs/e2e-evidence.md) for an end-to-end evidence pack (CloudWatch + EC2 container logs).

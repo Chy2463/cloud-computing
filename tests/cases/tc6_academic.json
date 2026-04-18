@@ -1,2 +1,18 @@
-{}
+{
+  "id": "TC6",
+  "name": "Academic keywords -> ACADEMIC + MEDIUM",
+  "input": {
+    "title": "Research Seminar",
+    "description": "This is a valid description with more than forty characters.",
+    "location": "Campus",
+    "date": "2026-04-17",
+    "organiser": "Eve"
+  },
+  "expected": {
+    "status": "APPROVED",
+    "category": "ACADEMIC",
+    "priority": "MEDIUM",
+    "note": "Approved"
+  }
+}
 

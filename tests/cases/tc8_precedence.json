@@ -1,2 +1,18 @@
-{}
+{
+  "id": "TC8",
+  "name": "Category precedence: opportunity > academic > social > general",
+  "input": {
+    "title": "Internship Seminar",
+    "description": "This is a valid description with more than forty characters.",
+    "location": "Campus",
+    "date": "2026-04-17",
+    "organiser": "Grace"
+  },
+  "expected": {
+    "status": "APPROVED",
+    "category": "OPPORTUNITY",
+    "priority": "HIGH",
+    "note": "Approved"
+  }
+}
 

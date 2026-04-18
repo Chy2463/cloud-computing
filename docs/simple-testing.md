@@ -47,6 +47,11 @@ For a submitted event:
 
 Use any HTTP client. Examples below use `curl`.
 
+PowerShell note (Windows):
+
+- `curl` may be an alias of `Invoke-WebRequest` in some environments.
+- If `curl` behaves unexpectedly, use the PowerShell examples in Option B (PowerShell).
+
 ### 1) Create a submission
 
 ```bash
@@ -175,3 +180,40 @@ curl -i -X POST http://<EC2_EIP>:8081/api/submissions/<submission_id>/result \
   -H "Content-Type: application/json" \
   -d '{"status":"APPROVED","category":"GENERAL","priority":"NORMAL","note":"test"}'
 ```
+
+## Option B (PowerShell) — Test via Workflow API (Windows)
+
+### 1) Create a submission
+
+```powershell
+$body = @{
+  title = "E2E Test"
+  description = "This is an end-to-end test description with more than forty characters."
+  location = "Campus"
+  date = "2026-04-17"
+  organiser = "Bob"
+} | ConvertTo-Json
+
+$resp = Invoke-RestMethod -Method Post -Uri "http://localhost:8081/api/submissions" -ContentType "application/json" -Body $body
+$resp
+```
+
+Expected: `submission_id` is returned, and `triggered` is `true` when Lambda triggering is enabled.
+
+### 2) Query status (immediately)
+
+```powershell
+$id = $resp.submission_id
+Invoke-RestMethod -Method Get -Uri "http://localhost:8081/api/submissions/$id" | ConvertTo-Json -Depth 10
+```
+
+Expected: `result.status` is `PENDING`.
+
+### 3) Query status again (after a few seconds)
+
+```powershell
+Start-Sleep -Seconds 10
+Invoke-RestMethod -Method Get -Uri "http://localhost:8081/api/submissions/$id" | ConvertTo-Json -Depth 10
+```
+
+Expected: `result.status` becomes one of `APPROVED | NEEDS_REVISION | INCOMPLETE`.

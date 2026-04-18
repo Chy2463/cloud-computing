@@ -1,2 +1,0 @@
-# Result Update Function
-

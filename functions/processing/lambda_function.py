@@ -8,9 +8,9 @@ from typing import Any
 
 def _pick_category(text: str) -> str:
     t = text.lower()
-    opportunity = ("intern", "internship", "job", "career", "hiring", "apply", "scholarship", "volunteer", "opportunity")
-    academic = ("lecture", "seminar", "workshop", "research", "conference", "exam", "study", "academic")
-    social = ("party", "meetup", "club", "social", "gathering", "dinner", "game", "music")
+    opportunity = ("career", "internship", "recruitment")
+    academic = ("workshop", "seminar", "lecture")
+    social = ("club", "society", "social")
 
     if any(k in t for k in opportunity):
         return "OPPORTUNITY"
@@ -24,6 +24,60 @@ def _pick_category(text: str) -> str:
 def _priority_for_category(category: str) -> str:
     mapping = {"OPPORTUNITY": "HIGH", "ACADEMIC": "MEDIUM", "SOCIAL": "NORMAL", "GENERAL": "NORMAL"}
     return mapping.get(category, "NORMAL")
+
+
+def evaluate_submission(input_data: dict[str, Any]) -> dict[str, str]:
+    title = str(input_data.get("title") or "").strip()
+    description = str(input_data.get("description") or "").strip()
+    location = str(input_data.get("location") or "").strip()
+    date = str(input_data.get("date") or "").strip()
+    organiser = str(input_data.get("organiser") or "").strip()
+
+    combined_text = f"{title} {description}".strip()
+    category = _pick_category(combined_text)
+    priority = _priority_for_category(category)
+
+    missing: list[str] = []
+    if not title:
+        missing.append("title")
+    if not description:
+        missing.append("description")
+    if not location:
+        missing.append("location")
+    if not date:
+        missing.append("date")
+    if not organiser:
+        missing.append("organiser")
+
+    if missing:
+        return {
+            "status": "INCOMPLETE",
+            "category": category,
+            "priority": priority,
+            "note": f"Missing required fields: {', '.join(missing)}",
+        }
+
+    date_ok = bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", date))
+    desc_ok = len(description) >= 40
+    if not date_ok or not desc_ok:
+        issues: list[str] = []
+        if not date_ok:
+            issues.append("Date must be in YYYY-MM-DD format")
+        if not desc_ok:
+            issues.append("Description must be at least 40 characters")
+        return {
+            "status": "NEEDS_REVISION",
+            "category": category,
+            "priority": priority,
+            "note": "; ".join(issues),
+        }
+
+    return {
+        "status": "APPROVED",
+        "category": category,
+        "priority": priority,
+        "note": "Approved",
+    }
 
 def _http_get_json(url: str, timeout_s: int = 5) -> tuple[int, dict[str, Any] | None]:
     req = urllib.request.Request(url, method="GET")
@@ -62,64 +116,8 @@ def lambda_handler(event, context):
         return {"submission_id": submission_id, "error": "WORKFLOW_INVALID_RESPONSE"}
 
     input_data: dict[str, Any] = data.get("input") or {}
-    title = str(input_data.get("title") or "").strip()
-    description = str(input_data.get("description") or "").strip()
-    location = str(input_data.get("location") or "").strip()
-    date = str(input_data.get("date") or "").strip()
-    organiser = str(input_data.get("organiser") or "").strip()
+    if not isinstance(input_data, dict):
+        input_data = {}
 
-    combined_text = f"{title} {description}".strip()
-    category = _pick_category(combined_text)
-    priority = _priority_for_category(category)
-
-    missing = []
-    if not title:
-        missing.append("title")
-    if not description:
-        missing.append("description")
-    if not location:
-        missing.append("location")
-    if not date:
-        missing.append("date")
-    if not organiser:
-        missing.append("organiser")
-
-    if missing:
-        return {
-            "submission_id": submission_id,
-            "result": {
-                "status": "INCOMPLETE",
-                "category": category,
-                "priority": priority,
-                "note": f"Missing required fields: {', '.join(missing)}",
-            },
-        }
-
-    date_ok = bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", date))
-    desc_ok = len(description) >= 40
-    if not date_ok or not desc_ok:
-        issues = []
-        if not date_ok:
-            issues.append("Date must be in YYYY-MM-DD format")
-        if not desc_ok:
-            issues.append("Description must be at least 40 characters")
-        return {
-            "submission_id": submission_id,
-            "result": {
-                "status": "NEEDS_REVISION",
-                "category": category,
-                "priority": priority,
-                "note": "; ".join(issues),
-            },
-        }
-
-    return {
-        "submission_id": submission_id,
-        "result": {
-            "status": "APPROVED",
-            "category": category,
-            "priority": priority,
-            "note": "Approved",
-        },
-    }
+    return {"submission_id": submission_id, "result": evaluate_submission(input_data)}
 

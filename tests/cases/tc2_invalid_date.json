@@ -1,2 +1,18 @@
-{}
+{
+  "id": "TC2",
+  "name": "Invalid date format -> NEEDS_REVISION",
+  "input": {
+    "title": "General Event",
+    "description": "This is a valid description with more than forty characters.",
+    "location": "Campus",
+    "date": "2026-4-17",
+    "organiser": "Alice"
+  },
+  "expected": {
+    "status": "NEEDS_REVISION",
+    "category": "GENERAL",
+    "priority": "NORMAL",
+    "note": "Date must be in YYYY-MM-DD format"
+  }
+}
 

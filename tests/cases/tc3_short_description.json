@@ -1,2 +1,18 @@
-{}
+{
+  "id": "TC3",
+  "name": "Short description (<40) -> NEEDS_REVISION",
+  "input": {
+    "title": "General Event",
+    "description": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "location": "Campus",
+    "date": "2026-04-17",
+    "organiser": "Bob"
+  },
+  "expected": {
+    "status": "NEEDS_REVISION",
+    "category": "GENERAL",
+    "priority": "NORMAL",
+    "note": "Description must be at least 40 characters"
+  }
+}
 
