@@ -22,12 +22,6 @@ def create_app() -> Flask:
             "organiser": request.form.get("organiser", "").strip(),
         }
 
-        if not any(form_data.values()):
-            return render_template(
-                "error.html",
-                message="Please fill in the form before submitting."
-            ), 400
-
         try:
             response = requests.post(
                 f"{workflow_base_url}/api/submissions",
